@@ -15,8 +15,8 @@
  * @version 3.0.2
  ***********************************************************************/
 ;@Ahk2Exe-IgnoreBegin
-; #Include <CheckUpdate\ScriptVersionMap>
-; version :=  ScriptVersion.ScriptVersionMap['main'] 
+#Include <CheckUpdate\ScriptVersionMap>
+version :=  ScriptVersion.ScriptVersionMap['main'] 
 ;@Ahk2Exe-IgnoreEnd
 SetVersion := "3.0.0" ; If quoted literal not empty, do 'SetVersion'
 ;@Ahk2Exe-Nop
@@ -32,300 +32,74 @@ SetVersion := "3.0.0" ; If quoted literal not empty, do 'SetVersion'
 #MaxThreadsBuffer true
 A_MaxHotkeysPerInterval := 1000
 ; --------------------------------------------------------------------------------
-; SendMode("Input")
+SendMode("Input")
 SetWorkingDir(A_ScriptDir)
 SetTitleMatchMode(2)
 ; --------------------------------------------------------------------------------
-AE.DetectHidden(true)
-AE.SetDelays(-1)
-AE.DPIAwareness()
+_AE_DetectHidden(true)
+_AE_SetDelays(-1)
+_AE_PerMonitor_DPIAwareness()
 
 ; --------------------------------------------------------------------------------
 /**
  * Function: Includes
  */
-; #Include <Includes\Includes_Standard>
-
+#Include <App\Autohotkey>
 #Include <Includes\Includes_Extensions>
 #Include <Includes\Includes_DPI>
-#Include <Tools\Info>
-#Include <Utils\ClipSend>
-#Include <Tools\explorerGetPath.v2>
-#Include <App\Autohotkey>
 #Include <Tools\InternetSearch>
-#Include <Tools\WAPI\WAPI>
-
-#Include <Includes\Includes_Runner>
-; #Include <Abstractions\Script>
+; #Include <Includes\Includes_Runner>
+#Include <Tools\Info>
 ; ---------------------------------------------------------------------------
 /**
  * Function ..: Create a shellhook to monitor for changes in Monitor DPI based on the Window location (hopefully).
  */
-; ShellHook(A_DPI_GetInfo)
+ShellHook(A_DPI_GetInfo)
 ; ---------------------------------------------------------------------------
-; toggleCapsLock(){
-; 	SetCapsLockState(!GetKeyState('CapsLock', 'T'))
+toggleCapsLock(){
+	SetCapsLockState(!GetKeyState('CapsLock', 'T'))
+}
+; ---------------------------------------------------------------------------
+/**
+ * function ...: Combine BlockInput() && SendLevel()
+ * @example n 			 => default: n := 1
+ * @example SendLevel()  => default: SendLevel(1)
+ * @example BlockInput() => default: BlockInput(1) (1 = true)
+ */
+; ---------------------------------------------------------------------------
+_AE_bInpt_sLvl(n := 1) => (SendLevel(n), BlockInput(n))
+; _AE_bInpt_sLvl(n := 1) {
+; 	SendLevel(n)
+; 	BlockInput(n)
 ; }
-toggleCapsLock() => AE.toggleCapsLock()
 ; ---------------------------------------------------------------------------
-; _AE_bInpt_sLvl(n := 1) => (SendLevel(0), SendLevel(A_SendLevel + n), BlockInput(n))
-_AE_bInpt_sLvl(n := 1) => AE.BISL(n := 1)
-; ---------------------------------------------------------------------------
-
-; ---------------------------------------------------------------------------
-; @i...: Old Method with a return value of original SendMode()
-; ---------------------------------------------------------------------------
-_AE_SendModeEvent() => AE.SME()
-_AE_SME() => AE.SME()
-; ---------------------------------------------------------------------------
-; @i...: New Method with a return object
-; ---------------------------------------------------------------------------
-_AE_SendMode() => AE.SM()
-; ---------------------------------------------------------------------------
-_AE_SM() => AE.SM()
-; ---------------------------------------------------------------------------
-; **************************************************************************
-; ---------------------------------------------------------------------------
-; **************************************************************************
-; @function...: Restore the SendMode() & SetKeyDelay()
-; @i..........: Restore initial values from return object
-; @example....: SendMode()  => default: SendMode('Event')
-; @example....: s := A_SendMode, d := A_KeyDelay, p := A_KeyDuration
-; **************************************************************************
-; ---------------------------------------------------------------------------
-_AE_rSM(RestoreObject) => AE.rSM(RestoreObject)
-; ---------------------------------------------------------------------------
-; **************************************************************************
-; ---------------------------------------------------------------------------
-_AE_DetectHidden(n := 1) => AE.DetectHidden(n := 1)
-; --------------------------------------------------------------------------------
-_AE_SetDelays(n := -1) => AE.SetDelays(n := -1)
-; --------------------------------------------------------------------------------
-_AE_PerMonitor_DPIAwareness() => AE.DPIAwareness()
-
-Class AE {
-    static toggleCapsLock() => SetCapsLockState(!GetKeyState('CapsLock', 'T'))
-	; --------------------------------------------------------------------------------
-	static DetectHidden(bool := true){
-		DetectHiddenText(bool)
-		DetectHiddenWindows(bool)
-	}
-    ; ---------------------------------------------------------------------------
-    ; @i...: Syntax Sugar
-    ; ---------------------------------------------------------------------------
-    ; static DetectHidden(bool := true) => this._DetectHidden(bool := true)
-	; --------------------------------------------------------------------------------
-	static _SetDelays(n := -1) {
-		SetControlDelay(n)
-		SetMouseDelay(n)
-		SetWinDelay(n)
-	}
-    ; ---------------------------------------------------------------------------
-    ; @i...: Syntax Sugar
-    ; ---------------------------------------------------------------------------
-    static SetDelays(n := -1) => this._SetDelays(n := -1)
-	; --------------------------------------------------------------------------------
-    ; **************************************************************************
-    ; @i...: Set or return the DPIAwareness
-    ; **************************************************************************
-	static _AE_PerMonitor_DPIAwareness() {
-		; global A_DPIAwareness
-		static MaximumPerMonitorDpiAwarenessContext := VerCompare(A_OSVersion, '>=10.0.15063') ? -4 : -3
-		static DefaultDpiAwarenessContext := MaximumPerMonitorDpiAwarenessContext
-        static A_DPIAwareness := DefaultDpiAwarenessContext
-        switch {
-            case MaximumPerMonitorDpiAwarenessContext:
-                DllCall('SetThreadDpiAwarenessContext', 'ptr', MaximumPerMonitorDpiAwarenessContext, 'ptr')
-            case -4:
-                DllCall('SetThreadDpiAwarenessContext', 'ptr', -4, 'ptr')
-            case -3:
-                DllCall('SetThreadDpiAwarenessContext', 'ptr', -3, 'ptr')   
-            default:
-                DllCall('SetThreadDpiAwarenessContext', 'ptr', -4, 'ptr')
-        }
-		return A_DPIAwareness
-	}
-	static _DPIAwareness() {
-		global A_DPIAwareness
-		A_DPIAwareness := DPI().WinGetDpi('A')
-		; tooltip(A_DPIAwareness)
-		return A_DPIAwareness
-	}
-    ; ---------------------------------------------------------------------------
-    ; @i...: Syntax Sugar
-    ; ---------------------------------------------------------------------------    
-    static DPIAwareness() => this._DPIAwareness()
-    ; ---------------------------------------------------------------------------
-
-    ; **************************************************************************
-    ; @i...: Default: bi := 0 => BlockInput(0)
-    ; @i...: Default: n  := 1 => SendLevel(A_SendLevel + n)
-    ; **************************************************************************
-    static _BlockInputSendLevel(n := 1, bi := 0) {
-        SendLevel(0)
-        SendLevel(A_SendLevel + n)
-        (n >= 1) ? bi := 1 : bi := 0 
-        BlockInput(bi)
-    }
-    static BISL(n := 1, bi := 0) => this._BlockInputSendLevel(n := 1, bi := 0)
-	static BI(bi := 1) => BlockInput(bi)
-	static rBI(bi := 0) => BlockInput(bi)
-    ; **************************************************************************
-    ; @function...: Change the SendMode() & SetKeyDelay()
-    ; @i..........: Store initial values to be used in return for restoration
-    ; @example....: SendMode()  => default: SendMode('Event')
-    ; @example....: s := A_SendMode, d := A_KeyDelay, p := A_KeyDuration
-    ; **************************************************************************
-    ; ---------------------------------------------------------------------------
-    ; @i...: New Method with a return object
-    ; ---------------------------------------------------------------------------
-    static _SendMode(&SendModeObj?, &s?, &d?, &p?){
-        s := A_SendMode, d := A_KeyDelay, p := A_KeyDuration
-        SetKeyDelay(-1, -1)
-        SendMode('Event')
-        return SendModeObj := {s:s, d:d, p:p}
-    }
-    ; ---------------------------------------------------------------------------
-    ; @i...: Syntax Sugar
-    ; ---------------------------------------------------------------------------
-    static SM(&SendModeObj?, &s?, &d?, &p?) => this._SendMode(&SendModeObj?, &s?, &d?, &p?) 
-    ; ---------------------------------------------------------------------------
-    ; ---------------------------------------------------------------------------
-    ; @i...: Old Method with a return value of original SendMode()
-    ; ---------------------------------------------------------------------------
-    static _SendModeEvent(){
-        s := A_SendMode, d := A_KeyDelay, p := A_KeyDuration
-        SetKeyDelay(-1, -1)
-        SendMode('Event')
-        return s
-    }
-    ; ---------------------------------------------------------------------------
-    ; @i...: Syntax Sugar
-    ; ---------------------------------------------------------------------------
-    static SendModeEvent() => this._SendModeEvent()
-    static SME() => this.SendModeEvent()
-    ; ---------------------------------------------------------------------------
-    ; **************************************************************************
-    ; @function...: Restore the SendMode() & SetKeyDelay()
-    ; @i..........: Restore initial values from return object
-    ; @example....: SendMode()  => default: SendMode('Event')
-    ; @example....: s := A_SendMode, d := A_KeyDelay, p := A_KeyDuration
-    ; **************************************************************************
-    ; ---------------------------------------------------------------------------
-    static _RestoreSendMode(RestoreObject){
-        SetKeyDelay(RestoreObject.d, RestoreObject.p)
-        SendMode(RestoreObject.s)
-    }
-    ; ---------------------------------------------------------------------------
-    ; @i...: Syntax Sugar
-    ; ---------------------------------------------------------------------------
-    static rSM(RestoreObject) => this._RestoreSendMode(RestoreObject)
-    ; ---------------------------------------------------------------------------
-    ; **************************************************************************
-
-    ; ---------------------------------------------------------------------------
-
-    ; **************************************************************************
-    ; @i: Clip_Sleep()
-    ; @step: If clipboard still in use (long paste), sleep for a bit
-    ; @param: n ...: default value = 10 ms
-    ; ---------------------------------------------------------------------------
-    static _Clipboard_Sleep(n:=10){
-        loop n {
-            Sleep(n)
-        ; } Until !DllCall('GetOpenClipboardWindow')
-        } Until !WAPI.GetOpenClipboardWindow() || (A_Index = 50)
-    }
-    ; ---------------------------------------------------------------------------
-    ; @i...: Sytax Sugar
-    ; ---------------------------------------------------------------------------
-    static cSleep(n:=10) => this._Clipboard_Sleep(n:=10)
-    ; ---------------------------------------------------------------------------
-    ; **************************************************************************
-
-    ; ---------------------------------------------------------------------------
-
-    ; **************************************************************************
-    ; @region: _Clipboard_Backup_Clear()
-    ; @param: cBak ...: clipboard backup 
-    ; ---------------------------------------------------------------------------
-	static _Clipboard_Backup_Clear(&cBak?){
-		; ---------------------------------------------------------------------------
-		; @i...: Backup current clipboard
-		; ---------------------------------------------------------------------------
-		cBak := ClipboardAll()
-		; ---------------------------------------------------------------------------
-		; @i...: Clear current clipboard
-		; ---------------------------------------------------------------------------
-		; EmptyClipboard() => DllCall('User32\EmptyClipboard', 'int')
-		EmptyClipboard() => WAPI.EmptyClipboard()
-		this.cSleep(100)
-		WAPI.CloseClipboard()
-		return cBak
-	}
-    ; ---------------------------------------------------------------------------
-    ; @SyntaxSugar...: Sytax Sugar
-    ; ---------------------------------------------------------------------------
-    static cBUClr(&cBak?) => this._Clipboard_Backup_Clear(&cBak?)
-    ; ---------------------------------------------------------------------------
-    ; **************************************************************************
-
-    ; ---------------------------------------------------------------------------
-
-    ; **************************************************************************
-    ; @region: _Clipboard_Restore()
-    ; @param: cBak ...: clipboard backup 
-    ; ---------------------------------------------------------------------------
-	static _Clipboard_Restore(cBak){
-		; ---------------------------------------------------------------------------
-		; @i...: Restore current clipboard
-		; ---------------------------------------------------------------------------
-		EmptyClipboard() => WAPI.EmptyClipboard()
-		this.cSleep(100)
-		A_Clipboard := cBak
-		WAPI.CloseClipboard()
-	}
-    ; ---------------------------------------------------------------------------
-    ; @SyntaxSugar...: Sytax Sugar
-    ; ---------------------------------------------------------------------------
-    static cRestore(cBak) => this._Clipboard_Restore(cBak)
-    ; ---------------------------------------------------------------------------
-    ; **************************************************************************
+_AE_DetectHidden(bool := true) {
+	DetectHiddenText(bool)
+	DetectHiddenWindows(bool)
 }
-; SetClipboardFont(isItalic := false, isBold := false, isUnderline := false, isStrikeOut := false, isSubscript := false, isSuperscript := false
-; 	, nHeight := 0, nWidth := 0, nEscapement := 0, nOrientation := 0, nCharSet := 1, nOutPrecision := 3, nQuality := 1, nPitchAndFamily := 49, lpszFace := 'Times New Roman', fontSize := 11) {
-	; t:= ''
-	
-SetClipboardFont(isItalic := false, isBold := false, isUnderline := false, isStrikeOut := false, isSubscript := false, isSuperscript := false
-	, nHeight := 0, nWidth := 0, nEscapement := 0, nOrientation := 0, nCharSet := 0, nOutPrecision := 0, nQuality := 0, nPitchAndFamily := 0, lpszFace := 'Times New Roman', fontSize := 11) {
-	; hdc := DllCall("GetDC", "ptr", fCtl := ControlGetFocus('A'), 'ptr')
-	hdc := DllCall("GetDC", "ptr", fCtl := ControlGetFocus('A'), 'ptr')
-	fnWeight := isBold ? 700 : 400
-	fnItalic := isItalic ? 1 : 0
-	fnUnderline := isUnderline ? 1 : 0
-	fnStrikeOut := isStrikeOut ? 1 : 0
-	fnSubscript := isSubscript ? 1 : 0
-	fnSuperscript := isSuperscript ? 1 : 0
-	; Mapping nCharSet options to corresponding values
-	charSetOptions := Map("ANSI_CHARSET", 0, "DEFAULT_CHARSET", 1, "SYMBOL_CHARSET", 2, "SHIFTJIS_CHARSET", 128, "HANGEUL_CHARSET", 129, "HANGUL_CHARSET", 129, "GB2312_CHARSET", 134, "CHINESEBIG5_CHARSET", 136, "OEM_CHARSET", 255)
-	;    nCharSet := charSetOptions[nCharSet] ? charSetOptions[nCharSet] : charSetOptions["DEFAULT_CHARSET"]
-	; Mapping nOutPrecision options to corresponding values
-	outPrecisionOptions := Map("OUT_DEFAULT_PRECIS", 0, "OUT_STRING_PRECIS", 1, "OUT_CHARACTER_PRECIS", 2, "OUT_STROKE_PRECIS", 3, "OUT_TT_PRECIS", 4, "OUT_DEVICE_PRECIS", 5, "OUT_RASTER_PRECIS", 6, "OUT_TT_ONLY_PRECIS", 7, "OUT_OUTLINE_PRECIS", 8)
-	;    nOutPrecision := outPrecisionOptions[nOutPrecision] ? outPrecisionOptions[nOutPrecision] : outPrecisionOptions["OUT_DEFAULT_PRECIS"]
-	; Mapping nQuality options to corresponding values
-	qualityOptions := Map("DEFAULT_QUALITY", 0, "DRAFT_QUALITY", 1, "PROOF_QUALITY", 2, "NONANTIALIASED_QUALITY", 3, "ANTIALIASED_QUALITY", 4)
-	;    nQuality := qualityOptions[nQuality] ? qualityOptions[nQuality] : qualityOptions["DEFAULT_QUALITY"]
-	; Mapping nPitchAndFamily options to corresponding values
-	pitchAndFamilyOptions := Map("DEFAULT_PITCH", 0, "FIXED_PITCH", 1, "VARIABLE_PITCH", 2, "FF_DONTCARE", 0<<4, "FF_ROMAN", 1<<4, "FF_SWISS", 2<<4, "FF_MODERN", 3<<4, "FF_SCRIPT", 4<<4, "FF_DECORATIVE", 5<<4)
-	;    nPitchAndFamily := pitchAndFamilyOptions[nPitchAndFamily] ? pitchAndFamilyOptions[nPitchAndFamily] : pitchAndFamilyOptions["FIXED_PITCH"]
-	hfont := DllCall("CreateFont", "int", nHeight, "int", nWidth, "int", nEscapement, "int", nOrientation
-		, "int", fnWeight, "uint", fnItalic, "uint", fnUnderline, "uint", fnStrikeOut, "uint", nCharSet
-		, "uint", nOutPrecision, "uint", 0, "uint", nQuality, "uint", nPitchAndFamily, "str", lpszFace)
-	oldFont := DllCall("SelectObject", "ptr", hdc, "ptr", hfont)
-	DllCall("DeleteObject", "ptr", oldFont)
-	DllCall("ReleaseDC", "ptr", 0, "ptr", hdc)
-	; return hfont
+; --------------------------------------------------------------------------------
+_AE_SetDelays(n := -1) {
+	SetControlDelay(n)
+	SetMouseDelay(n)
+	SetWinDelay(n)
 }
+; --------------------------------------------------------------------------------
+_AE_PerMonitor_DPIAwareness() => AE._DPIAwareness()
+; _AE_PerMonitor_DPIAwareness() {
+; 	MaximumPerMonitorDpiAwarenessContext := VerCompare(A_OSVersion, ">=10.0.15063") ? -4 : -3
+; 	Global 	DefaultDpiAwarenessContext := MaximumPerMonitorDpiAwarenessContext, 
+; 			A_DPIAwareness := DefaultDpiAwarenessContext
+; 	try {
+; 		DllCall("SetThreadDpiAwarenessContext", "ptr", MaximumPerMonitorDpiAwarenessContext, "ptr")
+; 	}
+; 	catch{ 
+; 		DllCall("SetThreadDpiAwarenessContext", "ptr", -4, "ptr")
+; 	}
+; 	else {
+; 		DllCall("SetThreadDpiAwarenessContext", "ptr", -3, "ptr")
+; 	}
+; 	return A_DPIAwareness
+; }
 __AE_CopyLib() {
 	local Lib := A_MyDocuments '\AutoHotkey\Lib'
 	If !(DirExist(Lib)) {
@@ -336,39 +110,34 @@ __AE_CopyLib() {
 ; ---------------------------------------------------------------------------
 ; $^c:: clip_it() ; Clip hotkey
 ; $^b:: clip_it(1) ; Paste last clip hotkey
-; ---------------------------------------------------------------------------
-; @i: Clip_Sleep()
-; @step: If clipboard still in use (long paste), sleep for a bit
-; @param: n ...: default value = 10 ms
-; ---------------------------------------------------------------------------
-_AE_Clip_Sleep(n:=10){
-	loop n {
+clip_sleep(n:=50){
+	; ---------------------------------------------------------------------------
+	; @step If clipboard still in use (long paste), sleep for a bit
+	; @param n ...: default value = 50 ms
+	; ---------------------------------------------------------------------------
+	While !DllCall('GetOpenClipboardWindow') {
 		Sleep(n)
-	; } Until !DllCall('GetOpenClipboardWindow')
-    } Until !WAPI.GetOpenClipboardWindow() || (A_Index = 50)
+	}
 }
 _AE_BU_Clr_Clip(){
 	; ---------------------------------------------------------------------------
-	; @i...: Backup current clipboard
+	; @i ...: Backup current clipboard
 	; ---------------------------------------------------------------------------
 	cBak := ClipboardAll()
 	; ---------------------------------------------------------------------------
-	; @i...: Clear current clipboard
+	; @i ...: Clear current clipboard
 	; ---------------------------------------------------------------------------
-	; EmptyClipboard() => DllCall('User32\EmptyClipboard', 'int')
-    EmptyClipboard() => WAPI.EmptyClipboard()
 	Static i_max := 5
 	i := 0
 	Loop i_max {
-		eClip := EmptyClipboard()
+		A_Clipboard := ''
 		i++
 		Sleep(50)
-	} Until (eClip == 0)
+	} Until (A_Clipboard == '')
 	i := 0
 	Loop i_max {
 		Sleep(50)
-	} Until !DllCall('GetOpenClipboardWindow', 'ptr')
-	WAPI.CloseClipboard()
+	} Until !DllCall("GetOpenClipboardWindow", 'ptr')
 	return cBak
 }
 ; _AE_RestoreClip(cBak, delay := 50){
@@ -388,8 +157,7 @@ _AE_RestoreClip(cBak, delay := 50){
 	i := 0
 	Loop i_max {
 		Sleep(50)
-	} Until !DllCall('GetOpenClipboardWindow', 'ptr')
-	WAPI.CloseClipboard()
+	} Until DllCall("GetOpenClipboardWindow", 'ptr')
 	_AE_bInpt_sLvl(0)
 }
 SClip(t){
@@ -403,11 +171,11 @@ SClip(t){
 	i := 0
 	Loop i_max {
 		Sleep(50)
-	} Until !DllCall('GetOpenClipboardWindow', 'ptr')
+	} Until DllCall("GetOpenClipboardWindow", 'ptr')
 	Send('^{sc2F}')
 }
 clip_it(send_clip := 0) {
-	Static last_clip := '' ; Track last clipboard
+	Static last_clip := "" ; Track last clipboard
 	If send_clip ; If send_clip is true
 	{
 		bak := ClipboardAll() ; Backup current clipboard
@@ -445,7 +213,7 @@ AE_GetScrollPos() { ; Obtains the current scroll position
 	; EM_GETSCROLLPOS = 0x04DD
 	PT := Buffer(8, 0)
 	SendMessage(0x04DD, 0, PT.Ptr, ControlGetFocus('A'))
-	Return {X: NumGet(PT, 0, 'Int'), Y: NumGet(PT, 4, 'Int')}
+	Return {X: NumGet(PT, 0, "Int"), Y: NumGet(PT, 4, "Int")}
 }
 ; ------------------------------------------------------------------------------------------------------------------
 AE_SetScrollPos(X, Y) { ; Scrolls the contents of a rich edit control to the specified point
@@ -453,7 +221,7 @@ AE_SetScrollPos(X, Y) { ; Scrolls the contents of a rich edit control to the spe
 	; Y : y-position to scroll to.
 	; EM_SETSCROLLPOS = 0x04DE
 	PT := Buffer(8, 0)
-	NumPut('Int', X, 'Int', Y, PT)
+	NumPut("Int", X, "Int", Y, PT)
 	Return SendMessage(0x04DE, 0, PT.Ptr, ControlGetFocus('A'))
 }
 ; --------------------------------------------------------------------------------
@@ -550,55 +318,29 @@ AE_GetSelText(fCtl := 0, hWnd := tryHwnd()) {
 ; ---------------------------------------------------------------------------
 ; @function GetSel() ...: Retrieves the starting and ending character positions of the selection in a rich edit control
 ; ---------------------------------------------------------------------------
-; AE_GetSel(fCtl := ControlGetFocus('A'), hWnd := tryHwnd()) { 
-; 	; Returns an object containing the keys S (start of selection) and E (end of selection)).
-; 	Static Msg := EM_GETSEL := 176
-; 	wParam := 0, lParam := 0
-; 	try (fCtl := ControlGetFocus('A'), ClassNN := ControlGetClassNN(fCtl))
-; 	wParam := Buffer(8, 0) ; LOWORD => start
-; 	lParam := Buffer(8, 0) ; HIWORD => end
-; 	; CR := Buffer(8, 0) ; LOWORD => start
-; 	; CE := Buffer(8, 0) ; HIWORD => end
-	
-; 	;! ---------------------------------------------------------------------------
-; 	; @i ... Working Calls
-; 	; ---------------------------------------------------------------------------
-; 	; DllCall('SendMessage', 'UInt', fCtl, 'UInt', Msg, 'UInt', wParam.Ptr, 'UInt', 0)
-; 	; DllCall('SendMessage', 'UInt', fCtl, 'UInt', Msg, 'UInt', 0, 'UInt', lParam.Ptr)
-; 	; ---------------------------------------------------------------------------
-; 	DllCall('SendMessage', 'UInt', fCtl, 'UInt', Msg, 'UInt', wParam.Ptr, 'UInt', lParam.Ptr)
-; 	; DllCall('SendMessage', 'UInt', fCtl, 'UInt', Msg, 'ptr', wParam.Ptr, 'ptr', lParam.Ptr) ;? (AJB - 2024.01.19) this also works
-; 	; ---------------------------------------------------------------------------
-; 	; SendMessage(Msg, wParam.Ptr, lParam.Ptr, fCtl)
-; 	;! ---------------------------------------------------------------------------
-; 	Return {S: NumGet(wParam,0,'uint'), E: NumGet(lParam,0, 'uint')}
-; 	; Return {S: NumGet(wParam,0,'uint'), E: NumGet(lParam,4, 'uint')}
-; 	; Return {S: NumGet(CR, 0, 'Int'), E: NumGet(CE, 0, 'Int')}
-; }
-; ---------------------------------------------------------------------------
-; @i ...: Retrieves the starting and ending character positions of the selection in a rich edit control
-; @i ...: Works great in ThunderRT6TextBox
-; @i ...: Will retrieve the total in TX11
-; ---------------------------------------------------------------------------
-AE_GetSel(fCtl := ControlGetFocus('A'), hWnd := WinActive('A')) { 
+AE_GetSel(fCtl := ControlGetFocus('A'), hWnd := tryHwnd()) { 
 	; Returns an object containing the keys S (start of selection) and E (end of selection)).
-	Msg := EM_GETSEL := 176
-	; Msg := EM_EXGETSEL := 1076 ; 0x0434
+	Static Msg := EM_GETSEL := 176
+	wParam := 0, lParam := 0
+	try (fCtl := ControlGetFocus('A'), ClassNN := ControlGetClassNN(fCtl))
 	wParam := Buffer(8, 0) ; LOWORD => start
 	lParam := Buffer(8, 0) ; HIWORD => end
-	; SendMessage(Msg, 0, lParam.Ptr, fCtl, hWnd)
-	; SendMessage(Msg, 0, lParam.Ptr, , fCtl)
-	; SendMessage(Msg, wParam.Ptr, 0, , fCtl)
-	; SendMessage(Msg, wParam.Ptr, 0, fCtl, hWnd)
-	; DllCall('SendMessage', 'UInt', fCtl, 'UInt', Msg, 'UInt', wParam.Ptr, 'UInt', lParam.Ptr)
-	DllCall('SendMessage', 'UInt', fCtl, 'UInt', Msg, 'UInt', wParam.Ptr, 'UInt', 0)
-	DllCall('SendMessage', 'UInt', fCtl, 'UInt', Msg, 'UInt', 0, 'UInt', lParam.Ptr)
-	Infos(
-		'S: ' NumGet(wParam, 0,'uint')
-		'`n'
-		'E: ' NumGet(lParam, 0,'uint')
-		)
-	Return {S: NumGet(wParam, 0,'uint'), E: NumGet(lParam, 4, 'uint')}
+	; CR := Buffer(8, 0) ; LOWORD => start
+	; CE := Buffer(8, 0) ; HIWORD => end
+	
+	;! ---------------------------------------------------------------------------
+	; @i ... Working Calls
+	; ---------------------------------------------------------------------------
+	; DllCall('SendMessage', 'UInt', fCtl, 'UInt', Msg, 'UInt', wParam.Ptr, 'UInt', 0)
+	; DllCall('SendMessage', 'UInt', fCtl, 'UInt', Msg, 'UInt', 0, 'UInt', lParam.Ptr)
+	; ---------------------------------------------------------------------------
+	DllCall('SendMessage', 'UInt', fCtl, 'UInt', Msg, 'UInt', wParam.Ptr, 'UInt', lParam.Ptr)
+	; DllCall('SendMessage', 'UInt', fCtl, 'UInt', Msg, 'ptr', wParam.Ptr, 'ptr', lParam.Ptr) ;? (AJB - 2024.01.19) this also works
+	; ---------------------------------------------------------------------------
+	; SendMessage(Msg, wParam.Ptr, lParam.Ptr, fCtl)
+	;! ---------------------------------------------------------------------------
+	Return {S: NumGet(wParam,0,'uint'), E: NumGet(lParam,0, 'uint')}
+	; Return {S: NumGet(CR, 0, "Int"), E: NumGet(CE, 0, "Int")}
 }
 ; --------------------------------------------------------------------------------
 ; @function GetText() ...: Gets the whole content of the control as plain text
@@ -609,8 +351,8 @@ AE_GetText(fCtl := 0, hWnd := tryHwnd()) {
 	try (fCtl := ControlGetFocus('A'), ClassNN := ControlGetClassNN(fCtl))
 	; GETTEXTEX structure
 	GTX := Buffer(12 + (A_PtrSize * 2), 0) 
-	NumPut('UInt', TxtL * 2, GTX) ; cb
-	NumPut('UInt', 1200, GTX, 8)  ; codepage = Unicode
+	NumPut("UInt", TxtL * 2, GTX) ; cb
+	NumPut("UInt", 1200, GTX, 8)  ; codepage = Unicode
 	If (TxtL := AE_GetTextLen() + 1) {
 		; If (TxtL := AE_GetTextLen(fCtl, hWnd) + 1) {
 		VarSetStrCapacity(&Txt, TxtL)
@@ -629,20 +371,18 @@ AE_GetText(fCtl := 0, hWnd := tryHwnd()) {
 ; ---------------------------------------------------------------------------
 AE_GetTextLen(fCtl := 0, hWnd := tryHwnd()) { 
 	static EM_GETTEXTLENGTHEX := 0x045F
+	try (fCtl := ControlGetFocus('A'), ClassNN := ControlGetClassNN(fCtl))
 	; ---------------------------------------------------------------------------
 	; @GETTEXTLENGTHEX GETTEXTLENGTHEX Structure
 	; ---------------------------------------------------------------------------
 	GTL := Buffer(8, 0)
 	; codepage = Unicode
-	NumPut('UInt', 1200, GTL.Ptr, 4)  
+	NumPut("UInt", 1200, GTL.Ptr, 4)  
 	if (fCtl = 0) {
-		; txtL := SendMessage(EM_GETTEXTLENGTHEX, GTL.Ptr, 0, hWnd,hWnd)
+		txtL := SendMessage(EM_GETTEXTLENGTHEX, GTL.Ptr, 0, hWnd,hWnd)
 		; SendMessage(EM_GETTEXTLENGTHEX, GTL.Ptr, 0, ,hWnd)
-		try (fCtl := ControlGetFocus('A'), ClassNN := ControlGetClassNN(fCtl))
-		txtL := SendMessage(EM_GETTEXTLENGTHEX, GTL.Ptr, 0, fCtl)
 	} else (
-		txtL := SendMessage(EM_GETTEXTLENGTHEX, GTL.Ptr, 0, WinActive('A'))
-		; txtL := SendMessage(EM_GETTEXTLENGTHEX, GTL.Ptr, 0, fCtl,hWnd)
+		txtL := SendMessage(EM_GETTEXTLENGTHEX, GTL.Ptr, 0, fCtl,hWnd)
 	)
 	Return txtL
 }
@@ -653,18 +393,18 @@ struct_GTL(fCtl := 0, hWnd := tryHwnd()) => struct_GETTEXTLENGTHEX(fCtl := 0, hW
 struct_GETTEXTLENGTHEX(fCtl := 0, hWnd := tryHwnd()) {
 	; codepage = Unicode
 	GTL := Buffer(8, 0)
-	return NumPut('UInt', 1200, GTL.Ptr, 4)  
+	return NumPut("UInt", 1200, GTL.Ptr, 4)  
 }
 ; ---------------------------------------------------------------------------
 ; @function ReplaceSel() ...: Replaces the selected text with the specified text
 ; ---------------------------------------------------------------------------
-_AE_ReplaceSel(Text := '') { ; Replaces the selected text with the specified text
+_AE_ReplaceSel(Text := "") { ; Replaces the selected text with the specified text
 	Msg := EM_REPLACESEL := 0x00C2
 	; WM_SETTEXT := 0x000C
 	Return SendMessage(Msg, 1, StrPtr(Text), ControlGetFocus('A'))
 }
 EM_REPLACESEL := 0x00C2
-AE_ReplaceSel(Text := '', fCtl := 0, hWnd := tryHwnd()) { 
+AE_ReplaceSel(Text := "", fCtl := 0, hWnd := tryHwnd()) { 
 	static EM_REPLACESEL := 194 ; 0xC2
 	; try (fCtl := ControlGetFocus('A'), ClassNN := ControlGetClassNN(fCtl))
 	; If (fCtl = 0) {
@@ -722,18 +462,16 @@ AE_GetCaretLine(line := -1, fCtl := ControlGetFocus('A'), hWnd := tryHwnd()) {
 AE_GetLineCount(fCtl := ControlGetFocus('A'), hWnd := tryHwnd()) {
 	static EM_GETLINECOUNT := 186
 	LC := 0
-	LC := SendMessage(EM_GETLINECOUNT,0,0,fCtl,'A')
 	; LC := SendMessage(EM_GETLINECOUNT,,,,'ahk_id ' hWnd)
-	; try ClassNN := ControlGetClassNN(fCtl)
-	; If (fCtl = 0) {
-	; 	; LC := SendMessage(0xBA,,,hWnd,hwnd)
-	; 	LC := SendMessage(EM_GETLINECOUNT,,,,hwnd)
-	; } else {
-	; 	LC := SendMessage(EM_GETLINECOUNT,0,0,fCtl,'A')
-	; }
+	try ClassNN := ControlGetClassNN(fCtl)
+	If (fCtl = 0) {
+		; LC := SendMessage(0xBA,,,hWnd,hwnd)
+		LC := SendMessage(0xBA,,,,hwnd)
+	} else {
+		LC := SendMessage(0xBA,,,fCtl,hwnd)
+	}
 	; Infos('LC: ' LC)
-	Return LC := SendMessage(EM_GETLINECOUNT,0,0,fCtl,'A')
-	; Return LC := SendMessage(EM_GETLINECOUNT,,,fCtl,'A')
+	Return LC 
 }
 Edit_GetLineCount(hEdit, hWnd){
     Static EM_GETLINECOUNT:=0xBA
@@ -752,7 +490,7 @@ AE_GetLineIndex(LineNumber := -1, fCtl := 0, hWnd := tryHwnd()) {
 AE_GetLinePos(fCtl:=0){
 	LI := AE_GetLineIndex(, fCtl)
 	LP 	 := Buffer(A_PtrSize, 0)
-	LinePos := (NumGet(LP, 'Ptr') - (LI + 1))
+	LinePos := (NumGet(LP, "Ptr") - (LI + 1))
 }
 ; --------------------------------------------------------------------------------
 ; Statistics
@@ -765,7 +503,7 @@ AE_GetStats(fCtl := ControlGetFocus('A'), hWnd := tryHwnd()) {
 	static EM_LINEINDEX := 187, EM_EXLINEFROMCHAR := 1078
 	static EM_GETSEL := 176, EM_LINEFROMCHAR:= 201, EM_GETLINE := 196
 	; fCtl := 0
-	SB := 0, LI := 0, start := 0, end := 0
+	SB := 0, LI := 0
 	LinePos := 0,Line := 0,LineCount := 0,CharCount := 0, 
 	CurrentCol :=  Result := Result1 := LinePos1 := num_of_chars := GetCaretLine := LI1 := LineCount1 := MaxLinePos := L := 0, 
 	sel := '', getline := 0, selected := '', ClassNN := ''
@@ -781,39 +519,40 @@ AE_GetStats(fCtl := ControlGetFocus('A'), hWnd := tryHwnd()) {
 	; 	ClassNN := unset
 	; }
 	; egcl := EditGetLineCount(ClassNN)
-	; try getSel := AE_GetSel(fCtl, hWnd)
-	try getSel := AE_GetSel(fCtl)
-	; try Selected := EditGetSelectedText(fCtl, hWnd)
-	; try MaxLinePos := SendMessage(EM_GETSEL, SB.Ptr, 0,fCtl,hWnd) ;? total characters in edit control
-	; try LineCount := EditGetLineCount(fCtl,'A')
-	; try LineCount1 := AE_GetLineCount(fCtl, hWnd)
-	;!try  LineCount1 := Edit_GetLineCount(fCtl, hWnd)
-	;!try  getline := SendMessage(EM_GETLINE,1, SBgl.Ptr, fCtl, hWnd)
-	; try  getline := SendMessage(EM_GETLINE,1, SBgl.Ptr, fCtl)
-	; try Line := (SendMessage(EM_LINEFROMCHAR, -1, 0, fCtl,hWnd) + 1)
+	try getSel := AE_GetSel(fCtl, hWnd)
+	try Selected := EditGetSelectedText(fCtl, hWnd)
+	try MaxLinePos := SendMessage(EM_GETSEL, SB.Ptr, 0,fCtl,hWnd) ;? total characters in edit control
+	try LineCount := EditGetLineCount(fCtl,'A')
+	try LineCount1 := AE_GetLineCount(fCtl, hWnd)
+	;try  LineCount1 := Edit_GetLineCount(fCtl, hWnd)
+	; try  getline := SendMessage(EM_GETLINE,1, SBgl.Ptr, fCtl, hWnd)
+	try  getline := SendMessage(EM_GETLINE,1, SBgl.Ptr, fCtl)
+	try Line := (SendMessage(EM_LINEFROMCHAR, -1, 0, fCtl,hWnd) + 1)
 		
-	; try GetCaretLine := AE_GetCaretLine(-1,fCtl, hWnd)
-	; try CurrentCol := EditGetCurrentCol(fCtl, hWnd)
+	try GetCaretLine := AE_GetCaretLine(-1,fCtl, hWnd)
+	try CurrentCol := EditGetCurrentCol(fCtl, hWnd)
 	; ---------------------------------------------------------------------------
 	; @grouped -1 = current line => @param ...: this_line := -1
 	; ---------------------------------------------------------------------------
-	; this_line := -1
-	; try Result := (SendMessage(EM_LINEINDEX, this_line, 0, fCtl,hWnd)) ;? starting character number
-	; try LI := AE_GetLineIndex(this_line, fCtl, hWnd) ;
-	; try LinePos := (NumGet(SB, 'Ptr') - (LI + 1))
+	this_line := -1
+	try Result := (SendMessage(EM_LINEINDEX, this_line, 0, fCtl,hWnd)) ;? starting character number
+	try LI := AE_GetLineIndex(this_line, fCtl, hWnd) ;
+	try LinePos := (NumGet(SB, "Ptr") - (LI + 1))
 	; ---------------------------------------------------------------------------
 	; @group 1 => +1 line to try and get the difference between the two
 	; ---------------------------------------------------------------------------
-	; try n_line := 1
-	; try Result1 := (SendMessage(EM_LINEINDEX, this_line, 0, fCtl,hWnd)) ;? starting character number
-	; try LI1 := AE_GetLineIndex(this_line, fCtl, hWnd) ;
-	; try LinePos1 := (NumGet(SB, 'Ptr') - (LI + 1))
-	; try num_of_chars := SendMessage(WM_GETTEXTLENGTH := 0x000E, 0, 0, fCtl, hWnd)
+	try n_line := 1
+	try Result1 := (SendMessage(EM_LINEINDEX, this_line, 0, fCtl,hWnd)) ;? starting character number
+	try LI1 := AE_GetLineIndex(this_line, fCtl, hWnd) ;
+	try LinePos1 := (NumGet(SB, "Ptr") - (LI + 1))
+	; num_of_chars := LI1 - LI
+	try num_of_chars := SendMessage(WM_GETTEXTLENGTH := 0x000E, 0, 0, fCtl, hWnd)
+	; LI = 0 ? LinePos++ : false
 	; ---------------------------------------------------------------------------
-	; try CharCount := AE_GetTextLen(fCtl, hWnd)
+	try CharCount := AE_GetTextLen(fCtl, hWnd)
 	
 	Try {
-		
+		start := 0, end := 0
 		Infos(
 			; 'fCtl: ' fCtl
 			; '`n'
@@ -846,8 +585,8 @@ AE_GetStats(fCtl := ControlGetFocus('A'), hWnd := tryHwnd()) {
 			'-----------------------------------`n'
 			'GetCaretLine: ' GetCaretLine '`n'
 			'CharCount: ' CharCount
-		)
-		; , 3000)
+		; )
+		, 3000)
 	}
 	selS := getsel.S
 	selE := getsel.E
@@ -894,15 +633,55 @@ AE_HideSelection(Mode := true, fCtl := 0, hWnd := tryHwnd()) {
 	; Return True
 	
 }
-
+Class AE {
+	; --------------------------------------------------------------------------------
+	static _AE_DetectHidden(bool := true){
+		DetectHiddenText(bool)
+		DetectHiddenWindows(bool)
+	}
+	static _DetectHidden(bool := true){
+		DetectHiddenText(bool)
+		DetectHiddenWindows(bool)
+	}
+	; --------------------------------------------------------------------------------
+	static _AE_SetDelays(n := -1) {
+		SetControlDelay(n)
+		SetMouseDelay(n)
+		SetWinDelay(n)
+	}
+	static _SetDelays(n := -1) {
+		SetControlDelay(n)
+		SetMouseDelay(n)
+		SetWinDelay(n)
+	}
+	; --------------------------------------------------------------------------------
+	static _AE_PerMonitor_DPIAwareness() {
+		global A_DPIAwareness
+		MaximumPerMonitorDpiAwarenessContext := VerCompare(A_OSVersion, ">=10.0.15063") ? -4 : -3
+		Global DefaultDpiAwarenessContext := MaximumPerMonitorDpiAwarenessContext, A_DPIAwareness := DefaultDpiAwarenessContext
+		try {
+			DllCall("SetThreadDpiAwarenessContext", "ptr", MaximumPerMonitorDpiAwarenessContext, "ptr")
+		} catch {
+			DllCall("SetThreadDpiAwarenessContext", "ptr", -4, "ptr")
+		} else{
+			DllCall("SetThreadDpiAwarenessContext", "ptr", -3, "ptr")
+		}
+		return A_DPIAwareness
+	}
+	static _DPIAwareness() {
+		global A_DPIAwareness
+		A_DPIAwareness := DPI().WinGetDpi('A')
+		; tooltip(A_DPIAwareness)
+		return A_DPIAwareness
+	}
+}
 
 ; --------------------------------------------------------------------------------
 ;              Ctrl+s Reload AutoHotKey Scripts (to test/load changes)
 ; --------------------------------------------------------------------------------
-#HotIf WinActive(' - Visual Studio Code')
+#HotIf WinActive(" - Visual Studio Code")
 	; ~^s::ReloadAllAhkScripts()
 	~^s::Reload()
-	; ~^s::Script.Reload()
 #HotIf
 ; --------------------------------------------------------------------------------
 /**
@@ -922,11 +701,11 @@ AE_HideSelection(Mode := true, fCtl := 0, hWnd := tryHwnd()) {
 	[x] AHK Website:	65412 ; Opens https://www.autohotkey.com/ in default browser; and 65413
 	[x] Save?:		65414
 	! Don't use these => static a := { Open: 65300, Help:    65301, Spy: 65302, XXX (nonononono) Reload: 65303 [bad reload like Reload()], Edit: 65304, Suspend: 65305, Pause: 65306, Exit:   65307 }
-	scripts .=  (scripts ? '`r`n' : '') . RegExReplace(title, ' - AutoHotkey v[\.0-9]+$')
+	scripts .=  (scripts ? "`r`n" : "") . RegExReplace(title, " - AutoHotkey v[\.0-9]+$")
  * @example
 	Refactored:
 		- Changed DetectHiddenWindows(true) to AE._DetectHidden(true)
-		- Declared vars: oList := [], aList := [], i := '', v := '', scripts := '', excludeTitle := '', excludeText := ''
+		- Declared vars: oList := [], aList := [], i := '', v := '', scripts := "", excludeTitle := '', excludeText := ''
 		- Added a RegExMatch => via ~= => to see if the Title or Text exists
  *	//; TODO Change exList's to Arrays, and create for-loops
  */
@@ -937,7 +716,7 @@ ReloadAllAhkScripts() {
 	AE._DetectHidden(true)
 	aList := [], title := '', WinTitle := '', scripts := ''
 	aList := ReloadList()
-	Infos(aList.ToString(',`n'))
+	Infos(_ArrayToString(aList, ',`n'))
 	static  WM_COMMAND := 273, ; 0x111 or 0x00000111
 			; menucmdid := cmdidOLEObjectMenuButton := 65400,
 			menucmdid := cmdidOLEObjectMenuButton := 65303,
@@ -947,13 +726,13 @@ ReloadAllAhkScripts() {
 			; WinTitle := 'ahk_id ' aList[A_Index]
 		WinTitle := 'ahk_id ' WinTitle
 		title := WinGetTitle(WinTitle)
-			; PostMessage(WM_COMMAND,65400,0,,'ahk_id ' aList[A_Index])
+			; PostMessage(WM_COMMAND,65400,0,,"ahk_id " aList[A_Index])
 			; PostMessage(Msg,wParam,lParam,,title)
 			; SendMessage(Msg,wParam,lParam,,title)
 		Run(title)
 		WinKill(title)
 		; Exit()
-		scripts .=  (scripts ? '`r`n' : '') . RegExReplace(title, ' - AutoHotkey v[\.0-9]+$')
+		scripts .=  (scripts ? "`r`n" : "") . RegExReplace(title, " - AutoHotkey v[\.0-9]+$")
 	}
 		Infos(scripts)
 }
@@ -977,7 +756,7 @@ ReloadList() {
 			}
 		}
 	}
-	static oList := WinGetList('ahk_class AutoHotkey',,excludeTitle)
+	static oList := WinGetList("ahk_class AutoHotkey",,excludeTitle)
 	List := oList.Length
 	for i, v in oList {
 		aList.SafePush(v)
@@ -1001,16 +780,16 @@ ShellHook(callback := '') {
 	; hWnd := WinActive('A')
 	rVal := ''
 	hWnd := ControlGetFocus('A')
-	DllCall('RegisterShellHookWindow', 'UInt', A_ScriptHwnd)
-	OnMessage(DllCall('RegisterWindowMessage', 'Str', 'SHELLHOOK'), rval := callback)
-	; OnMessage(DllCall('RegisterWindowMessage', 'Str', 'SHELLHOOK'), MyFunc)
+	DllCall("RegisterShellHookWindow", "UInt", A_ScriptHwnd)
+	OnMessage(DllCall("RegisterWindowMessage", "Str", "SHELLHOOK"), rval := callback)
+	; OnMessage(DllCall("RegisterWindowMessage", "Str", "SHELLHOOK"), MyFunc)
 	return rVal
 }
 ; ---------------------------------------------------------------------------
 A_DPI_GetInfo(event := HSHELL_WINDOWCREATED := 1, hWnd := WinActive('A'),info*) {
 	CoordMode('ToolTip', 'Client')
-	_AE_DetectHidden(1)
-	_AE_bInpt_sLvl(1)
+	_AE_DetectHidden()
+	_AE_bInpt_sLvl()
 	; --------------------------------------------------------------------------------
 	; hook := SetWinEventHook(HandleWinEvent)
 	; --------------------------------------------------------------------------------
@@ -1023,7 +802,7 @@ A_DPI_GetInfo(event := HSHELL_WINDOWCREATED := 1, hWnd := WinActive('A'),info*) 
 	nEvent := (event = 1) ? 'HSHELL_WINDOWCREATED' : (event = 2) ? 'HSHELL_WINDOWDESTROYED' : (event = 3) ? 'HSHELL_ACTIVATESHELLWINDOW' : (event = 4) ? 'HSHELL_WINDOWACTIVATED' : (event = 32772) ? 'HSHELL_RUDEAPPACTIVATED' : (event = 5) ? 'HSHELL_GETMINRECT' : (event = 6) ? 'HSHELL_REDRAW' : (event = 7) ? 'HSHELL_TASKMAN' : (event = 8) ? 'HSHELL_LANGUAGE' : (event = 9) ? 'HSHELL_SYSMENU' : (event = 10) ? 'HSHELL_ENDTASK' : (event = 11) ? 'HSHELL_ACCESSIBILITYSTATE' : (event = 12) ? 'HSHELL_APPCOMMAND' : (event = 13) ? 'HSHELL_WINDOWREPLACED' : (event = 14) ? 'HSHELL_WINDOWREPLACING' : (event = 32768) ? 'HSHELL_HIGHBIT' : (event = 32774) ? 'HSHELL_FLASH' : 'No Event'
 	if ((event = 1) || (event = 4) || (event = 32772)) {
 		; hWnd := WinActive('A')
-		DllCall('GetWindowThreadProcessId', 'Int', hwnd, 'Int*', &tpID := 0)
+		DllCall("GetWindowThreadProcessId", "Int", hwnd, "Int*", &tpID := 0)
 		try name := WinGetProcessName(hwnd)
 		if name = '' {
 			return
@@ -1063,7 +842,7 @@ A_DPI_GetInfo(event := HSHELL_WINDOWCREATED := 1, hWnd := WinActive('A'),info*) 
 }
 Edit_Copy(fCtl := ControlGetFocus('A'), hEdit := tryHwnd()) {
 	Static WM_COPY:=0x301
-	; SendMessage(WM_COPY, 0, 0, , 'ahk_id ' hEdit)
+	; SendMessage(WM_COPY, 0, 0, , "ahk_id " hEdit)
 	if WinActive('ahk_exe hznHorizon.exe') {
 		SendMessage(WM_COPY, 0, 0, fCtl,hEdit)
 	} else {
@@ -1077,7 +856,7 @@ SndMsgCopy(fCtl := 0) {
 	; @info ...: wParam & lParam MUST be 0
 	; @struct .: COPYDATASTRUCT ...: 
 	; @link ...: https://learn.microsoft.com/en-us/windows/win32/dataxchg/wm-copydata
-	; @func ...: StringLen := NumGet(lParam + A_PtrSize, 'int')    StringAddress := NumGet(lParam + 2*A_PtrSize)    Data := StrGet(StringAddress, StringLen, Encoding)
+	; @func ...: StringLen := NumGet(lParam + A_PtrSize, "int")    StringAddress := NumGet(lParam + 2*A_PtrSize)    Data := StrGet(StringAddress, StringLen, Encoding)
 	static WM_COPY := 0x0301, wParam := 0, lParam := 0
 	try fCtl := ControlGetFocus('A')
 	(fCtl = 0) ? SendEvent('^{sc2E}') : SendMessage(WM_COPY,wParam,lParam,fCtl,'A')
@@ -1094,11 +873,9 @@ SndMsgCut(fCtl := 0) {
 SndMsgPaste(fCtl := 0) {
 	; @link : https://learn.microsoft.com/en-us/windows/win32/dataxchg/wm-paste
 	; @info : wParam & lParam MUST be 0
-    sm := _AE_SM()
-	static WM_PASTE := 0x0302, wParam := 0, lParam := 0, paste := '{sc1D}{sc2F}' ;? ^v
+	static WM_PASTE := 0x0302, wParam := 0, lParam := 0
 	try fCtl := ControlGetFocus('A')
-	(fCtl = 0) ? Send(paste) : SendMessage(WM_PASTE,wParam,lParam,fCtl,'A')
-    _AE_rSM(sm)
+	(fCtl = 0) ? SendEvent('^{sc2F}') : SendMessage(WM_PASTE,wParam,lParam,fCtl,'A')
 }
 
 trayNotify(title, message, options := 0) {
@@ -1143,7 +920,7 @@ EmptyClipboard() => DllCall('User32\EmptyClipboard', 'int')
 ; OnMessage(0x4a, Receive_WM_COPYDATA)
 
 
-; dataReceived := ''
+; dataReceived := ""
 
 
 ; F1::
@@ -1154,7 +931,7 @@ EmptyClipboard() => DllCall('User32\EmptyClipboard', 'int')
 ;     MsgBox path
 ;     MsgBox all
 ;     MsgBox sel
-; 	Send_WM_COPYDATA('::echo 'Hello!'')
+; 	Send_WM_COPYDATA('::echo "Hello!"')
 ; return
 ; }
 
@@ -1179,7 +956,7 @@ EmptyClipboard() => DllCall('User32\EmptyClipboard', 'int')
 
 ; XY_Get(bAll:=false, bSelection:=false)
 ; {
-;     xyQueryScript := '::if (!' bAll ' && !' bSelection ') {$return = '<curpath>'`;} elseif (' bAll ') {$return = listpane(, , , '<crlf>')`;} elseif (' bSelection ') {$return = get('SelectedItemsPathNames', '<crlf>')`;} copydata ' G_OwnHWND ', '$return', 2`;'
+;     xyQueryScript := '::if (!' bAll ' && !' bSelection ') {$return = "<curpath>"`;} elseif (' bAll ') {$return = listpane(, , , "<crlf>")`;} elseif (' bSelection ') {$return = get("SelectedItemsPathNames", "<crlf>")`;} copydata ' G_OwnHWND ', "$return", 2`;'
 
 ;     Send_WM_COPYDATA(xyQueryScript)
 
@@ -1193,7 +970,7 @@ EmptyClipboard() => DllCall('User32\EmptyClipboard', 'int')
 ; if hwnd := WinActive(xyClass) || WinExist(xyClass) {
 ; 	for xyid in WinGetList(xyClass)
 ; 		for ctrl in WinGetControls(xyid)
-; 			if ctrl = 'ThunderRT6PictureBoxDC70'
+; 			if ctrl = "ThunderRT6PictureBoxDC70"
 ; 				return xyid
 ; 	if hwnd
 ; 		return hwnd
@@ -1212,11 +989,11 @@ EmptyClipboard() => DllCall('User32\EmptyClipboard', 'int')
 ; size := StrLen(message)
 
 ; COPYDATA := Buffer(A_PtrSize * 3)
-; NumPut('Ptr', 4194305, COPYDATA, 0)
-; NumPut('UInt', size * 2, COPYDATA, A_PtrSize)
-; NumPut('Ptr', StrPtr(message), COPYDATA, A_PtrSize * 2)
+; NumPut("Ptr", 4194305, COPYDATA, 0)
+; NumPut("UInt", size * 2, COPYDATA, A_PtrSize)
+; NumPut("Ptr", StrPtr(message), COPYDATA, A_PtrSize * 2)
 
-; return DllCall('User32.dll\SendMessageW', 'Ptr', xyHwnd, 'UInt', 74, 'Ptr', 0, 'Ptr', COPYDATA, 'Ptr')
+; return DllCall("User32.dll\SendMessageW", "Ptr", xyHwnd, "UInt", 74, "Ptr", 0, "Ptr", COPYDATA, "Ptr")
 ; }
 
 
@@ -1240,14 +1017,14 @@ EmptyClipboard() => DllCall('User32\EmptyClipboard', 'int')
 
 ; ; Get our own HWND (we have no visible window)
 ; DetectHiddenWindows(true)
-; G_OwnHWND := WinExist('Ahk_PID ' DllCall('GetCurrentProcessId'))
+; G_OwnHWND := WinExist("Ahk_PID " DllCall("GetCurrentProcessId"))
 ; G_OwnHWND += 0
 
 
 ; ; Get messages back from XYplorer
 ; OnMessage(0x4a, Receive_WM_COPYDATA)
 
-; global dataReceived := ''
+; global dataReceived := ""
 
 ; F1::
 ; {
@@ -1281,7 +1058,7 @@ EmptyClipboard() => DllCall('User32\EmptyClipboard', 'int')
 
 ; XY_Get(bAll:=false, bSelection:=false)
 ; {
-;     xyQueryScript := '::if (!' bAll ' && !' bSelection ') {$return = '<curpath>'`;} elseif (' bAll ') {$return = listpane(, , , '<crlf>')`;} elseif (' bSelection ') {$return = get('SelectedItemsPathNames', '<crlf>')`;} copydata ' G_OwnHWND ', '$return', 2`;'
+;     xyQueryScript := '::if (!' bAll ' && !' bSelection ') {$return = "<curpath>"`;} elseif (' bAll ') {$return = listpane(, , , "<crlf>")`;} elseif (' bSelection ') {$return = get("SelectedItemsPathNames", "<crlf>")`;} copydata ' G_OwnHWND ', "$return", 2`;'
 
 ;     Send_WM_COPYDATA(xyQueryScript)
 
@@ -1295,7 +1072,7 @@ EmptyClipboard() => DllCall('User32\EmptyClipboard', 'int')
 ;     if hwnd := WinActive(xyClass) || WinExist(xyClass) {
 ;         for xyid in WinGetList(xyClass)
 ;             for ctrl in WinGetControls(xyid)
-;                 if ctrl = 'ThunderRT6PictureBoxDC70'
+;                 if ctrl = "ThunderRT6PictureBoxDC70"
 ;                    return xyid
 ;         if hwnd
 ;            return hwnd
@@ -1314,17 +1091,17 @@ EmptyClipboard() => DllCall('User32\EmptyClipboard', 'int')
 ;    size := StrLen(message)
 ;    if !(StrLen(Chr(0xFFFF))) {
 ;       data := Buffer(size * 2, 0)
-;       StrPut(message, &data, size, 'UTF-16')
+;       StrPut(message, &data, size, "UTF-16")
 ;    } else {
 ;       data := message
 ;    }
 
 ;    COPYDATA := Buffer(A_PtrSize * 3)
-;    NumPut('Ptr', 4194305, COPYDATA, 0)
-;    NumPut('UInt', size * 2, COPYDATA, A_PtrSize)
-;    NumPut('Ptr', StrPtr(data), COPYDATA, A_PtrSize * 2)
+;    NumPut("Ptr", 4194305, COPYDATA, 0)
+;    NumPut("UInt", size * 2, COPYDATA, A_PtrSize)
+;    NumPut("Ptr", StrPtr(data), COPYDATA, A_PtrSize * 2)
 
-;    return DllCall('User32.dll\SendMessageW', 'Ptr', xyHwnd, 'UInt', 74, 'Ptr', 0, 'Ptr', COPYDATA, 'Ptr')
+;    return DllCall("User32.dll\SendMessageW", "Ptr", xyHwnd, "UInt", 74, "Ptr", 0, "Ptr", COPYDATA, "Ptr")
 ; }
 
 
