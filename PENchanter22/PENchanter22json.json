@@ -1,0 +1,36 @@
+﻿{
+	"PaliaDB": {
+		"items": [
+		{
+			"itemname": "Apple",
+			"itemregular": "",
+			"itemstar": "",
+			"itemseed": "",
+			"itemseedstar": "",
+			"itempreserves": "",
+			"itempreservesstar": "",
+			"itemtype": "crop, ingredient"
+		},
+		{
+			"itemname": "Blueberry",
+			"itemregular": "10",
+			"itemstar": "21",
+			"itemseed": "32",
+			"itemseedstar": "43",
+			"itempreserves": "54",
+			"itempreservesstar": "65",
+			"itemtype": "crop, ingredient"
+		},
+		{
+			"itemname": "Briar Daisy",
+			"itemregular": "",
+			"itemstar": "x",
+			"itemseed": "x",
+			"itemseedstar": "x",
+			"itempreserves": "x",
+			"itempreservesstar": "x",
+			"itemtype": "forage"
+		}
+		]
+	}
+}

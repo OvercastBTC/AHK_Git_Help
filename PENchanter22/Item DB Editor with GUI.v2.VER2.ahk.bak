@@ -1,0 +1,550 @@
+﻿#Requires AutoHotkey v2.0
+#SingleInstance Force
+SetWorkingDir A_ScriptDir
+
+#Include <Includes\ObjectTypeExtensions>
+
+#HotIf WinActive(A_ScriptName)
+~^s::Reload()
+#HotIf
+
+class PaliaDatabase {
+	static GameName := "Palia"
+	static DatabaseINIversion := "v2.0"
+	static GUITitle := "Database Editing GUI v2.0"
+	
+	static DB := {}
+	static DBArrayString := []
+	
+	static __New() {
+		this.InitializeVariables()
+		this.CreateGUI()
+	}
+	
+	static InitializeVariables() {
+		this.DatabaseINIfile := A_ScriptDir "\INI\" PaliaDatabase.GameName " Item Database " PaliaDatabase.DatabaseINIversion ".ini"
+		this.DatabaseSection := PaliaDatabase.GameName " - Items"
+		this.GUIshowX := 1348
+		this.GUIshowY := 141
+		this.GUIshowW := 500
+		this.GroupBoxW := this.GUIshowW - 20
+		this.GroupBoxH := 203 + 30 + 10
+		this.GUIshowH := this.GroupBoxH + 75
+		
+		this.ItemTypeAssociativeArray := Map("Item", " ", "StarQuality", "★", "Crop", "🪴", "Seed", "🛍", "Mining", "🪨", "Forageble", "🌹")
+		
+		; Load JSON data
+		try {
+			jsonText := FileRead(A_ScriptDir "\PaliaDB.json")
+			jsonObj := JSON.Parse(jsonText)
+			this.DB := this.ObjectToMap(jsonObj)
+		} catch as err {
+			MsgBox("Error loading JSON file: " err.Message)
+			return
+		}
+		
+		; ; Populate DBArrayString
+		; this.DBArrayString := []
+		; if (this.DB.Has("PaliaDB") && this.DB["PaliaDB"].Has("items")) {
+		; 	for item in this.DB["PaliaDB"]["items"] {
+		; 		if (item.Has("itemname")) {
+		; 			this.DBArrayString.Push(item["itemname"])
+		; 		}
+		; 	}
+		; } else {
+		; 	MsgBox("Error: JSON structure is not as expected. Please check the PaliaDB.json file.")
+		; }
+
+		    ; Populate DBArrayString
+			this.DBArrayString := []
+			if (this.DB.Has("PaliaDB") && this.DB["PaliaDB"].Has("items")) {
+				for item in this.DB["PaliaDB"]["items"] {
+					if (item.itemname !== '') {
+						this.DBArrayString.Push(item.itemname)
+					}
+				}
+			} else {
+				MsgBox("Error: JSON structure is not as expected. Please check the PaliaDB.json file.")
+			}
+	}
+	
+	static ObjectToMap(obj) {
+		if (Type(obj) = "Object") {
+			m := Map()
+			for k, v in obj.OwnProps() {
+				m[k] := this.ObjectToMap(v)
+			}
+			return m
+		} else if (Type(obj) = "Array") {
+			return obj.Map((v) => this.ObjectToMap(v))
+		} else {
+			return obj
+		}
+	}
+	
+    static CreateGUI() {
+        this.gui := Gui("+AlwaysOnTop +Border +MinimizeBox +Owner +SysMenu -MaximizeBox -Resize", this.GUITitle)
+        this.gui.BackColor := "0x00008B"  ; Dark Blue
+
+        this.AddGroupBox()
+        this.AddComboBox()
+        this.AddTextSeparator()
+        this.AddEditFields()
+        this.AddControlSelectText()
+        this.AddButtons()
+
+        this.gui.OnEvent("Close", (*) => ExitApp())
+        this.gui.OnEvent("Escape", (*) => ExitApp())
+
+        this.gui.Show(Format("x{} y{} w{} h{}", this.GUIshowX, this.GUIshowY, this.GUIshowW, this.GUIshowH))
+
+        OnMessage(0x100, ObjBindMethod(this, "OnKeyPress"))
+
+        this.SetupHotkeys()
+    }
+	
+    static AddGroupBox() {
+        this.gui.SetFont("s14", "Consolas")
+        this.groupBox := this.gui.AddGroupBox( Format("x10 y10 w{} h{} Section", this.GroupBoxW, this.GroupBoxH), 
+                    "-=> " this.GameName " Item Database <=-")
+    }
+	
+    static AddComboBox() {
+        this.gui.SetFont("s14 Bold", "Consolas")
+        ; this.ComboItemChoice := this.gui.Add("ComboBox", "xs+15 ys+33 vComboItemChoice", this.DBArrayString)
+        this.ComboItemChoice := this.gui.AddCustom('ClassComboBoxEx32', "xs+15 ys+33 vComboItemChoice", this.DBArrayString)
+        this.ComboItemChoice.OnEvent("Change", (*) => this.OnComboChange())
+        
+        ; Add event for auto-completion
+        this.ComboItemChoice.OnEvent("Change", (*) => this.AutoComplete(this.ComboItemChoice, this.DBArrayString, this.gui))
+    }
+
+	static AutoComplete(CtlObj, ListObj, GuiObj?) {
+        static CB_GETEDITSEL := 320, CB_SETEDITSEL := 322, valueFound := false
+        local Start := 0, End := 0
+
+        cText := CtlObj.Text
+        currContent := CtlObj.Text
+
+        CtlObj.Value := currContent
+
+        if (GetKeyState('Delete') || GetKeyState('Backspace')) {
+            return
+        }
+
+        valueFound := false
+
+        for index, value in ListObj {
+            if (value = currContent) {
+                valueFound := true
+                break
+            }
+        }
+
+        if (valueFound) {
+            return
+        }
+
+        this.MakeShort(0, &Start, &End)
+        try {
+            if (ControlChooseString(cText, CtlObj) > 0) {
+                Start := StrLen(currContent)
+                End := StrLen(CtlObj.Text)
+                PostMessage(CB_SETEDITSEL, 0, this.MakeLong(Start, End),, CtlObj.Hwnd)
+            }
+        } catch as e {
+            ControlSetText(currContent, CtlObj)
+            ControlSetText(cText, CtlObj)
+            PostMessage(CB_SETEDITSEL, 0, this.MakeLong(StrLen(cText), StrLen(cText)),, CtlObj.Hwnd)
+        }
+    }
+
+    static MakeShort(Long, &LoWord, &HiWord) {
+        LoWord := Long & 0xffff
+        HiWord := Long >> 16
+    }
+
+    static MakeLong(LoWord, HiWord) {
+        return (HiWord << 16) | (LoWord & 0xffff)
+    }
+
+    static AddTextSeparator() {
+        this.gui.SetFont("s16 Bold c00FF00", "Consolas")
+        this.TextSeparator1 := this.gui.AddText( "x+m", "/")
+    }
+	
+	static AddEditFields() {
+        this.ComboItemChoice.GetPos(&comboX, &comboY, &comboW)
+        startX := (comboX + comboW) + 50
+        startY := 'ym+' (comboY - 10)
+
+        this.AddEditField("ItemQuantity", "Quantity", "Red", startX, startY)
+        this.AddEditField("ItemStarQuality", "Star Quality", "Red", startX, "y+5")
+        this.AddEditField("SeedQuantity", "Seeds", "Yellow", startX, "y+5")
+        this.AddEditField("SeedStarQuality", "Star Quality", "Yellow", startX, "y+5")
+        this.AddEditField("PreservesQuantity", "Preserves", "Purple", startX, "y+5")
+        this.AddEditField("PreservesStarQuality", "Star Quality", "Purple", startX, "y+5")
+    }
+
+    static AddEditField(name, label, color, x, y) {
+        this.gui.SetFont("s14 Bold c000000", "Consolas")
+        edit := this.gui.AddEdit( Format("x{} {} v{} w50 Number", x, y, name))
+        this.gui.SetFont("s14 Bold c" color, "Consolas")
+        this.gui.AddText( "x+5", label)
+        return edit
+    }
+	
+    static AddControlSelectText() {
+        this.TextSeparator1.GetPos(&x, &y)
+        this.TextControlSelect := this.gui.AddText( Format("x{} y{}", x, y), "<- select")
+        this.TextControlSelect.Opt("Hidden")
+    }
+	
+    static AddButtons() {
+		this.groupBox.GetPos(&posX,&posY, &posW, &posH)
+        buttonY := posY + posH + 10
+        this.gui.AddButton( Format("x15 y{} w100 vButtonRestore", buttonY), "Restore").OnEvent("Click", (*) => Reload())
+        this.gui.AddButton( "x+10 w100 vButtonQuit", "Quit").OnEvent("Click", (*) => ExitApp())
+        this.gui.AddButton( "x+10 w100 vButtonUpdate", "Update").OnEvent("Click", (*) => this.OnUpdate())
+        this.gui.AddButton( "x+10 w100 vButtonNewEntry", "New Entry").OnEvent("Click", (*) => this.OnNewEntry())
+    }
+	
+    static OnComboChange(*) {
+        this.gui.Submit(false)
+        selectedItem := this.ComboItemChoice.Text
+        if (selectedItem != "" && this.DBArrayString.IndexOf(selectedItem) == 0) {
+            ; This is a new item
+            this.AddNewItem(selectedItem)
+        } else {
+            itemData := selectedItem != "" ? this.GetItemData(selectedItem) : this.GetDefaultItemData()
+            this.PopulateFields(itemData)
+        }
+    }
+
+	static GetDefaultItemData() {
+        return {
+            itemname: "",
+            itemregular: "",
+            itemstar: "",
+            itemseed: "",
+            itemseedstar: "",
+            itempreserves: "",
+            itempreservesstar: "",
+            itemtype: ""
+        }
+    }
+	
+	; static GetItemData(itemName) {
+	; 	if (this.DB.Has("PaliaDB") && this.DB["PaliaDB"].Has("items")) {
+	; 		for item in this.DB["PaliaDB"]["items"] {
+	; 			if (item.Has("itemname") && item["itemname"] = itemName) {
+	; 				return item
+	; 			}
+	; 		}
+	; 	}
+	; 	return Map()  ; Return an empty Map if item is not found
+	; }
+
+	static GetItemData(itemName) {
+		if (this.DB.Has("PaliaDB") && this.DB["PaliaDB"].Has("items")) {
+			for item in this.DB["PaliaDB"]["items"] {
+				if (item.itemname = itemName) {
+					return item
+				}
+			}
+		}
+		return {}  ; Return an empty object if item is not found
+	}
+	
+	; static PopulateFields(itemData) {
+	; 	this.gui["ItemQuantity"].Value := itemData.Has("itemregular") && itemData["itemregular"] != "" ? itemData["itemregular"] : "0"
+	; 	this.gui["ItemStarQuality"].Value := itemData.Has("itemstar") && itemData["itemstar"] != "" ? itemData["itemstar"] : "0"
+	; 	this.gui["SeedQuantity"].Value := itemData.Has("itemseed") && itemData["itemseed"] != "" ? itemData["itemseed"] : "0"
+	; 	this.gui["SeedStarQuality"].Value := itemData.Has("itemseedstar") && itemData["itemseedstar"] != "" ? itemData["itemseedstar"] : "0"
+	; 	this.gui["PreservesQuantity"].Value := itemData.Has("itempreserves") && itemData["itempreserves"] != "" ? itemData["itempreserves"] : "0"
+	; 	this.gui["PreservesStarQuality"].Value := itemData.Has("itempreservesstar") && itemData["itempreservesstar"] != "" ? itemData["itempreservesstar"] : "0"
+	; }
+
+	static PopulateFields(itemData) {
+		this.gui["ItemQuantity"].Value := itemData.itemregular != "" ? itemData.itemregular : "0"
+		this.gui["ItemStarQuality"].Value := itemData.itemstar != "" ? itemData.itemstar : "0"
+		this.gui["SeedQuantity"].Value := itemData.itemseed != "" ? itemData.itemseed : "0"
+		this.gui["SeedStarQuality"].Value := itemData.itemseedstar != "" ? itemData.itemseedstar : "0"
+		this.gui["PreservesQuantity"].Value := itemData.itempreserves != "" ? itemData.itempreserves : "0"
+		this.gui["PreservesStarQuality"].Value := itemData.itempreservesstar != "" ? itemData.itempreservesstar : "0"
+	}
+	
+	static OnUpdate(*) {
+		selectedItem := this.ComboItemChoice.Text
+		updatedData := {
+			itemname: selectedItem,
+			itemregular: this.gui["ItemQuantity"].Value,
+			itemstar: this.gui["ItemStarQuality"].Value,
+			itemseed: this.gui["SeedQuantity"].Value,
+			itemseedstar: this.gui["SeedStarQuality"].Value,
+			itempreserves: this.gui["PreservesQuantity"].Value,
+			itempreservesstar: this.gui["PreservesStarQuality"].Value,
+			itemtype: this.GetItemType(selectedItem)
+		}
+		
+		; Convert '0' to '' and keep 'x' as is
+		for key, value in updatedData.OwnProps() {
+			if (value = "0") {
+				updatedData.%key% := ""
+			}
+		}
+		
+		this.UpdateItemData(updatedData)
+		this.SaveDatabase()
+		MsgBox("Item updated successfully!")
+	}
+	
+	; static GetItemType(itemName) {
+	; 	if (this.DB.Has("PaliaDB") && this.DB["PaliaDB"].Has("items")) {
+	; 		for item in this.DB["PaliaDB"]["items"] {
+	; 			if (item.Has("itemname") && item["itemname"] = itemName) {
+	; 				return item.Has("itemtype") ? item["itemtype"] : ""
+	; 			}
+	; 		}
+	; 	}
+	; 	return ""
+	; }
+
+	static GetItemType(itemName) {
+		if (this.DB.Has("PaliaDB") && this.DB["PaliaDB"].Has("items")) {
+			for item in this.DB["PaliaDB"]["items"] {
+				if (item.itemname = itemName) {
+					; return item.itemtype ?? ""
+					return item.itemtype
+				}
+			}
+		}
+		return ""
+	}
+	
+	; static UpdateItemData(updatedData) {
+	; 	if (this.DB.Has("PaliaDB") && this.DB["PaliaDB"].Has("items")) {
+	; 		items := this.DB["PaliaDB"]["items"]
+	; 		for index, item in items {
+	; 			if (item.Has("itemname") && item["itemname"] = updatedData["itemname"]) {
+	; 				items[index] := updatedData
+	; 				break
+	; 			}
+	; 		}
+	; 	}
+	; }
+
+	static UpdateItemData(updatedData) {
+		if (this.DB.Has("PaliaDB") && this.DB["PaliaDB"].Has("items")) {
+			items := this.DB["PaliaDB"]["items"]
+			for index, item in items {
+				if (item.itemname = updatedData.itemname) {
+					items[index] := updatedData
+					break
+				}
+			}
+		}
+	}
+	
+	static SaveDatabase() {
+		jsonObj := this.MapToObject(this.DB)
+		jsonText := JSON.Stringify(jsonObj, 4)  ; 4 is for pretty-printing with indentation
+		try {
+			FileDelete(A_ScriptDir "\PaliaDB.json")
+			FileAppend(jsonText, A_ScriptDir "\PaliaDB.json", "UTF-8")
+		} catch as err {
+			MsgBox("Error saving database: " err.Message)
+		}
+	}
+
+	static MapToObject(m) {
+		if (Type(m) = "Map") {
+			obj := {}
+			for k, v in m {
+				obj.%k% := this.MapToObject(v)
+			}
+			return obj
+		} else if (Type(m) = "Array") {
+			return m.Map((v) => this.MapToObject(v))
+		} else {
+			return m
+		}
+	}
+	
+	static OnKeyPress(wParam, lParam, msg, hwnd) {
+		if (GetKeyName(Format("vk{:x}", wParam)) = "Enter") {
+			this.gui.Submit(false)
+		}
+	}
+	
+	static GetWindowPos(*) {
+		WinGetPos(&x, &y, &w, &h, "A")
+		A_Clipboard := Format("{}, {}, {}, {}", x, y, w, h)
+		MsgBox(A_Clipboard, "Window Position")
+	}
+	
+	static SetupHotkeys() {
+		HotIfWinActive("ahk_id " this.gui.Hwnd)
+		Hotkey("F2", (*) => this.GetWindowPos())
+		Hotkey("F9", (*) => Reload())
+		Hotkey("F10", (*) => ExitApp())
+		Hotkey("Escape", (*) => ExitApp())
+	}
+
+	; static OnNewEntry(*) {
+	; 	if (newItem := InputBox("Enter new item name:", "New Item").Value) {
+	; 		if (this.DBArrayString.IndexOf(newItem) > 0) {
+	; 			MsgBox("Item already exists!")
+	; 			return
+	; 		}
+			
+	; 		this.DBArrayString.Push(newItem)
+	; 		this.ComboItemChoice.Add([newItem])
+			
+	; 		newItemData := Map(
+	; 			"itemname", newItem,
+	; 			"itemregular", "",
+	; 			"itemstar", "",
+	; 			"itemseed", "",
+	; 			"itemseedstar", "",
+	; 			"itempreserves", "",
+	; 			"itempreservesstar", "",
+	; 			"itemtype", ""
+	; 		)
+			
+	; 		if (!this.DB.Has("PaliaDB")) {
+	; 			this.DB["PaliaDB"] := Map()
+	; 		}
+	; 		if (!this.DB["PaliaDB"].Has("items")) {
+	; 			this.DB["PaliaDB"]["items"] := []
+	; 		}
+	; 		this.DB["PaliaDB"]["items"].Push(newItemData)
+	; 		this.SaveDatabase()
+			
+	; 		this.ComboItemChoice.Value := newItem
+	; 		this.PopulateFields(newItemData)
+			
+	; 		MsgBox("New item added successfully!")
+	; 	}
+	; }
+	static OnNewEntry(*) {
+        this.ComboItemChoice.Value := ""  ; Clear the combobox
+        this.ComboItemChoice.Focus()  ; Focus on the combobox
+        this.PopulateFields(this.GetDefaultItemData())
+        ; We don't need to disable the main GUI or create a new GUI for entry
+        ; The user can now type directly into the combobox with auto-completion
+    }
+
+	static AddNewItem(newItem) {
+        if (newItem == "") {
+            return  ; Don't add empty items
+        }
+
+        this.DBArrayString.Push(newItem)
+        this.ComboItemChoice.Add([newItem])
+        
+        newItemData := this.GetDefaultItemData()
+        newItemData.itemname := newItem
+
+        if (!this.DB.Has("PaliaDB")) {
+            this.DB["PaliaDB"] := {}
+        }
+        if (!this.DB["PaliaDB"].Has("items")) {
+            this.DB["PaliaDB"]["items"] := []
+        }
+        this.DB["PaliaDB"]["items"].Push(newItemData)
+        this.SaveDatabase()
+        
+        this.ComboItemChoice.Value := newItem
+        this.PopulateFields(newItemData)
+        MsgBox("New item added: " . newItem)
+    }
+}
+
+; Create an instance of the PaliaDatabase class to start the application
+; paliaDB := PaliaDatabase()
+
+#Requires AutoHotkey v2.0
+#SingleInstance Force
+
+class PaliaDB {
+    static items := []
+    static gui := {}
+    static controls := {}
+    static currentItem := {}
+
+    static Init() {
+        this.LoadJSON()
+        this.CreateGUI()
+    }
+
+    static LoadJSON() {
+        try {
+            fileContent := FileRead('PaliaDB.json')
+            jsonData := JSON.Parse(fileContent)
+            this.items := jsonData.PaliaDB.items
+        } catch as err {
+            MsgBox('Error loading JSON file: ' . err.Message)
+            ExitApp()
+        }
+    }
+
+    static CreateGUI() {
+        this.gui := Gui()
+        this.gui.OnEvent('Close', (*) => ExitApp())
+
+        this.gui.Add('Text', 'x10 y10', 'Select an item:')
+        this.controls.itemList := this.gui.Add('DropDownList', 'x10 y30 w200 vItemList', this.GetItemNames())
+        this.controls.itemList.OnEvent('Change', (*) => this.OnItemChange())
+
+        y := 70
+        for field in ['itemname', 'itemregular', 'itemstar', 'itemseed', 'itemseedstar', 'itempreserves', 'itempreservesstar', 'itemtype'] {
+            this.gui.Add('Text', 'x10 y' . y, StrTitle(field) . ':')
+            this.controls[field] := this.gui.Add('Edit', 'x150 y' . y ' w200 v' . field)
+            y += 30
+        }
+
+        this.gui.Add('Button', 'x10 y' . (y + 10) . ' w100', 'Save').OnEvent('Click', (*) => this.SaveChanges())
+
+        this.gui.Show()
+    }
+
+    static GetItemNames() {
+        return this.items.Map((item) => item.itemname)
+    }
+
+    static OnItemChange() {
+        selectedItem := this.controls.itemList.Text
+        this.currentItem := this.items.Find((item) => item.itemname = selectedItem)
+        
+        for field, control in this.controls {
+            if (field != 'itemList') {
+                control.Value := this.currentItem[field]
+            }
+        }
+    }
+
+    static SaveChanges() {
+        for field, control in this.controls {
+            if (field != 'itemList') {
+                this.currentItem[field] := control.Value
+            }
+        }
+
+        this.WriteJSON()
+        MsgBox('Changes saved successfully.')
+    }
+
+    static WriteJSON() {
+        jsonData := {PaliaDB: {items: this.items}}
+        jsonString := JSON.Stringify(jsonData, 4)
+        try {
+            FileDelete('PaliaDB.json')
+            FileAppend(jsonString, 'PaliaDB.json')
+        } catch as err {
+            MsgBox('Error saving JSON file: ' . err.Message)
+        }
+    }
+}
+
+; PaliaDB.Init()

@@ -1,0 +1,982 @@
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "crop, ingredient"
+}
+Selected item: Briar Daisy
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Briar Daisy",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "crop, ingredient"
+}
+Selected item: Briar Daisy
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Briar Daisy",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Elephant
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Elephant",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "animal, help"
+}
+Selected item: Ginger
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Ginger",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "crop, ingredient"
+}
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Ginger
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Ginger",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "crop, ingredient"
+}
+Selected item: Elephant
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Elephant",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "animal, help"
+}
+Selected item: Briar Daisy
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Briar Daisy",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "crop, ingredient"
+}
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "crop, ingredient"
+}
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "crop, ingredient"
+}
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "crop, ingredient"
+}
+Selected item: Briar Daisy
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Briar Daisy",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "crop, ingredient"
+}
+Selected item: Briar Daisy
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Briar Daisy",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Elephant
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Elephant",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "animal, help"
+}
+Selected item: Ginger
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Ginger",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "crop, ingredient"
+}
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Ginger
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Ginger",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "crop, ingredient"
+}
+Selected item: Elephant
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Elephant",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "animal, help"
+}
+Selected item: Briar Daisy
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Briar Daisy",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "crop, ingredient"
+}
+Selected item: Briar Daisy
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Item data: {
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "Forageble"
+}
+Selected item: Briar Daisy
+Item data: {
+}
+Selected item: Elephant
+Item data: {
+}
+Selected item: Ginger
+Item data: {
+}
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Selected item: Blueberry
+Selected item: Blueberry
+Selected item: Blueberry
+Item data: {
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "Forageble"
+}
+Selected item: Blueberry
+Selected item: Blueberry
+Item data: {
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "Forageble"
+}
+Selected item: Elephant
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Elephant",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "animal, help"
+}
+Selected item: Ginger
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Ginger",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "crop, ingredient"
+}
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Item data: {
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "Forageble"
+}
+Selected item: Blueberry
+Item data: {
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "Forageble"
+}
+Selected item: Blueberry
+Item data: {
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "Forageble"
+}
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Item data: {
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "Forageble"
+}
+Selected item: Briar Daisy
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Briar Daisy",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Elephant
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Elephant",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "animal, help"
+}
+Selected item: Ginger
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Ginger",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "crop, ingredient"
+}
+Selected item: Elephant
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Elephant",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "animal, help"
+}
+Selected item: Briar Daisy
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Briar Daisy",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Item data: {
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "Forageble"
+}
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Item data: {
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "Forageble"
+}
+Selected item: Briar Daisy
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Briar Daisy",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Elephant
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Elephant",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "animal, help"
+}
+Selected item: Ginger
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Ginger",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "crop, ingredient"
+}
+Selected item: Elephant
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Elephant",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "animal, help"
+}
+Selected item: Briar Daisy
+Item data: {
+	"ItemQuantity": "0",
+	"ItemStarQuality": "0",
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Briar Daisy",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Item data: {
+	"itemname": "Blueberry",
+	"itempreserves": "54",
+	"itempreservesstar": "65",
+	"itemregular": "10",
+	"itemseed": "32",
+	"itemseedstar": "43",
+	"itemstar": "21",
+	"itemtype": "Forageble"
+}
+Selected item: Apple
+Item data: {
+	"PreservesQuantity": "0",
+	"PreservesStarQuality": "0",
+	"SeedQuantity": "0",
+	"SeedStarQuality": "0",
+	"itemname": "Apple",
+	"itempreserves": "",
+	"itempreservesstar": "",
+	"itemregular": "",
+	"itemseed": "",
+	"itemseedstar": "",
+	"itemstar": "",
+	"itemtype": "forage, crop, ingredient"
+}
+Selected item: Blueberry
+Selected item: Apple
+Item data: {"itemname":"Apple","itempreserves":"0","itempreservesstar":"0","itemregular":"5","itemseed":"0","itemseedstar":"0","itemstar":"0","itemtype":"Forageble"}
+Selected item: Blueberry
+Item data: {"itemname":"Blueberry","itempreserves":"54","itempreservesstar":"65","itemregular":"10","itemseed":"32","itemseedstar":"43","itemstar":"21","itemtype":"Forageble"}
+Selected item: Briar Daisy
+Item data: {"ItemQuantity":"0","ItemStarQuality":"0","PreservesQuantity":"0","PreservesStarQuality":"0","SeedQuantity":"0","SeedStarQuality":"0","itemname":"Briar Daisy","itempreserves":"","itempreservesstar":"","itemregular":"","itemseed":"","itemseedstar":"","itemstar":"","itemtype":"forage, crop, ingredient"}
+Selected item: Blueberry
+Item data: {"itemname":"Blueberry","itempreserves":"54","itempreservesstar":"65","itemregular":"10","itemseed":"32","itemseedstar":"43","itemstar":"21","itemtype":"Forageble"}
+Selected item: Apple
+Item data: {"itemname":"Apple","itempreserves":"0","itempreservesstar":"0","itemregular":"5","itemseed":"0","itemseedstar":"0","itemstar":"0","itemtype":"Forageble"}
+Selected item: Blueberry
+Item data: {"itemname":"Blueberry","itempreserves":"54","itempreservesstar":"65","itemregular":"10","itemseed":"32","itemseedstar":"43","itemstar":"21","itemtype":"Forageble"}
+Selected item: Briar Daisy
+Item data: {"ItemQuantity":"0","ItemStarQuality":"0","PreservesQuantity":"0","PreservesStarQuality":"0","SeedQuantity":"0","SeedStarQuality":"0","itemname":"Briar Daisy","itempreserves":"","itempreservesstar":"","itemregular":"","itemseed":"","itemseedstar":"","itemstar":"","itemtype":"forage, crop, ingredient"}
+Selected item: Elephant
+Item data: {}
+Selected item: Blueberry
+Item data: {"itemname":"Blueberry","itempreserves":"54","itempreservesstar":"65","itemregular":"10","itemseed":"32","itemseedstar":"43","itemstar":"21","itemtype":"Forageble"}
+Selected item: Apple
+Item data: {"itemname":"Apple","itempreserves":"0","itempreservesstar":"0","itemregular":"5","itemseed":"0","itemseedstar":"0","itemstar":"0","itemtype":"Forageble"}
+Selected item: Blueberry
+Item data: {"itemname":"Blueberry","itempreserves":"54","itempreservesstar":"65","itemregular":"10","itemseed":"32","itemseedstar":"43","itemstar":"21","itemtype":"Forageble"}
+Selected item: Apple
+Item data: {"itemname":"Apple","itempreserves":"0","itempreservesstar":"0","itemregular":"5","itemseed":"0","itemseedstar":"0","itemstar":"0","itemtype":"Forageble"}
+Selected item: Blueberry
+Item data: {"itemname":"Blueberry","itempreserves":"54","itempreservesstar":"65","itemregular":"10","itemseed":"32","itemseedstar":"43","itemstar":"21","itemtype":"Forageble"}
+Selected item: Briar Daisy
+Item data: {"itemname":"Briar Daisy","itempreserves":"0","itempreservesstar":"0","itemregular":"0","itemseed":"0","itemseedstar":"0","itemstar":"0","itemtype":"Seed"}
+Selected item: Elephant
+Item data: {"ItemQuantity":"0","ItemStarQuality":"0","PreservesQuantity":"0","PreservesStarQuality":"0","SeedQuantity":"0","SeedStarQuality":"0","itemname":"Elephant","itempreserves":"","itempreservesstar":"","itemregular":"","itemseed":"","itemseedstar":"","itemstar":"","itemtype":"animal, help"}
+Selected item: Ginger
+Item data: {"ItemQuantity":"0","ItemStarQuality":"0","PreservesQuantity":"0","PreservesStarQuality":"0","SeedQuantity":"0","SeedStarQuality":"0","itemname":"Ginger","itempreserves":"","itempreservesstar":"","itemregular":"","itemseed":"","itemseedstar":"","itemstar":"","itemtype":"crop, ingredient"}
+Selected item: Elephant
+Item data: {"ItemQuantity":"0","ItemStarQuality":"0","PreservesQuantity":"0","PreservesStarQuality":"0","SeedQuantity":"0","SeedStarQuality":"0","itemname":"Elephant","itempreserves":"","itempreservesstar":"","itemregular":"","itemseed":"","itemseedstar":"","itemstar":"","itemtype":"animal, help"}
+Selected item: Briar Daisy
+Item data: {"itemname":"Briar Daisy","itempreserves":"0","itempreservesstar":"0","itemregular":"0","itemseed":"0","itemseedstar":"0","itemstar":"0","itemtype":"Seed"}
+Selected item: Blueberry
+Item data: {"itemname":"Blueberry","itempreserves":"54","itempreservesstar":"65","itemregular":"10","itemseed":"32","itemseedstar":"43","itemstar":"21","itemtype":"Forageble"}
+Selected item: Apple
+Item data: {"itemname":"Apple","itempreserves":"0","itempreservesstar":"0","itemregular":"5","itemseed":"0","itemseedstar":"0","itemstar":"0","itemtype":"Forageble"}
